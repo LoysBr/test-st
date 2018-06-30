@@ -3,27 +3,32 @@ using System.Collections.Generic;
 
 public class GameInstance {
 
-	public bool isPaused = false;
-	public float currentTime = 0.0f;
-	public int currentLevel = 1;
-	public int currentLines = 0;
+	private bool 		m_isPaused = false;
+	private float 		m_currentTime = 0.0f;
+	private int 		m_currentLevel = 1;
+	private int 		m_currentLines = 0;
 
-	public GameInstance() { }
+	private GameGrid 	m_grid;
+
+	public GameInstance(int _gridSizeX, int _gridSizeY) 
+	{
+		m_grid = new GameGrid(_gridSizeX, _gridSizeY);
+	}
 
 	public void Update(float _elapsedTime)
 	{
-		if(isPaused) return;
+		if(m_isPaused) return;
 
-		currentTime += _elapsedTime;
-	}
-
-	public void Terminate()
-	{
-		//delete objects ?
+		m_currentTime += _elapsedTime;
 	}
 
 	public void Pause()
 	{
-		isPaused = !isPaused;
+		m_isPaused = !m_isPaused;
+	}
+
+	public GameGrid GetGameGrid()
+	{
+		return m_grid;
 	}
 }

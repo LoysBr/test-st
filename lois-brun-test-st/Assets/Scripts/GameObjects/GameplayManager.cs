@@ -4,29 +4,32 @@ using UnityEngine;
 
 public class GameplayManager : MonoBehaviour {
 
-	public MenuManager menuManager;
-	private GameInstance gameInstance;
+	public GridRenderingManager 	m_gridRenderer;
+	public MenuManager 				m_menuManager;
+	private GameInstance 			m_gameInstance;
+
+	public int 						m_gridSizeX = 10;
+	public int 						m_gridSizeY = 22;
 
 	public void ClearCurrentGame()
 	{
-		if(gameInstance != null)
-			gameInstance.Terminate();
-
-		gameInstance = null;
+		m_gameInstance = null;
 
 		Debug.Log("ClearCurrentGame()");
 	}
 	public void StartNewGame()
 	{
-		gameInstance = new GameInstance();
+		m_gameInstance = new GameInstance(m_gridSizeX, m_gridSizeY);
+
+		m_gridRenderer.InitializeGrid(m_gridSizeX, m_gridSizeY);
 
 		Debug.Log("StartNewGame ()");
 	}
 	public void PauseGame()
 	{
-		if(gameInstance != null)
+		if(m_gameInstance != null)
 		{
-			gameInstance.Pause();
+			m_gameInstance.Pause();
 		}
 	}
 	public void SaveGame()
@@ -38,10 +41,10 @@ public class GameplayManager : MonoBehaviour {
 		if(Input.GetKeyUp(KeyCode.Escape))
 			OnInput_Escape();
 
-		if(gameInstance == null)
+		if(m_gameInstance == null)
 			return;
 
-		gameInstance.Update(Time.deltaTime);
+		m_gameInstance.Update(Time.deltaTime);
 
 		if(Input.GetKeyDown(KeyCode.UpArrow))
 			OnInput_Up();
@@ -51,6 +54,16 @@ public class GameplayManager : MonoBehaviour {
 			OnInput_Right();
 		if(Input.GetKeyDown(KeyCode.DownArrow))
 			OnInput_Down();
+	}
+
+	public Tetrimino.eTetriminoType GetCellTetriminoType(int _x, int _y)
+	{
+		if(m_gameInstance == null)
+			return Tetrimino.eTetriminoType.BLANK;
+		else
+		{
+			return m_gameInstance.GetGameGrid().GetCellTetriminoType(_x, _y);
+		}
 	}
 
 	public void OnInput_Up()
@@ -67,7 +80,7 @@ public class GameplayManager : MonoBehaviour {
 	}
 	public void OnInput_Escape()
 	{
-		menuManager.Quit();
+		m_menuManager.Quit();
 	}
 
 

@@ -5,15 +5,82 @@ using UnityEngine.Tilemaps;
 
 public class GridRenderingManager : MonoBehaviour {
 
-	public Tilemap tileMap;
-	public Tile tile1;
-	// Use this for initialization
-	void Start () {
-		tileMap.SetTile(new Vector3Int(10,2,0), tile1);
-	}
-	
-	// Update is called once per frame
+	public GameplayManager 	m_gameplayManager;
+
+	public Tilemap 			m_tileMap;
+	public Tile 			m_backgroundTileA;
+	public Tile 			m_backgroundTileB;
+
+	public Tile 			m_tetriminoTypeITile;
+	public Tile 			m_tetriminoTypeOTile;
+	public Tile 			m_tetriminoTypeTTile;
+	public Tile 			m_tetriminoTypeLTile;
+	public Tile 			m_tetriminoTypeJTile;
+	public Tile 			m_tetriminoTypeZTile;
+	public Tile 			m_tetriminoTypeSTile;
+
+	private int 			m_gridSizeX;
+	private int 			m_gridSizeY;
+
 	void Update () {
-		
+
+		//for each time of timeMap, refresh its color depending on GameGrid's Cell TetriminoType 
+		for(int i = 0; i < m_gridSizeX; i++)
+		{
+			for(int j = 0; j < m_gridSizeY; j++)
+			{
+				Tetrimino.eTetriminoType tetriType = m_gameplayManager.GetCellTetriminoType(i, j);
+
+				Tile tile = m_tileMap.GetTile(new Vector3Int(i, j, 0)) as Tile;
+
+				if(tetriType != Tetrimino.eTetriminoType.BLANK)
+					tile = GetTetriminoTile(tetriType);
+				else
+					tile = i % 2 == 0 ? m_backgroundTileA : m_backgroundTileB; //if there is no Cell, put background tiles
+			}
+		} 
+	}
+
+	public void InitializeGrid(int _gridSizeX, int _gridSizeY)
+	{
+		m_gridSizeX = _gridSizeX;
+		m_gridSizeY = _gridSizeY;
+
+		for(int i = 0; i < m_gridSizeX; i++)
+		{
+			for(int j = 0; j < m_gridSizeY; j++)
+			{
+				//depending on column index we set different tile, to make columns visible
+				if(i % 2 == 0)
+					m_tileMap.SetTile(new Vector3Int(i, j, 0), m_backgroundTileA);
+				else
+					m_tileMap.SetTile(new Vector3Int(i, j, 0), m_backgroundTileB);
+			}
+		}
+
+		Debug.Log("InitializeGrid()");
+	}
+
+	public Tile GetTetriminoTile( Tetrimino.eTetriminoType _tetriminoType)
+	{
+		switch (_tetriminoType)
+		{
+		case Tetrimino.eTetriminoType.TYPE_I:
+			return m_tetriminoTypeITile;
+		case Tetrimino.eTetriminoType.TYPE_O:
+			return m_tetriminoTypeOTile;
+		case Tetrimino.eTetriminoType.TYPE_T:
+			return m_tetriminoTypeTTile;
+		case Tetrimino.eTetriminoType.TYPE_L:
+			return m_tetriminoTypeLTile;
+		case Tetrimino.eTetriminoType.TYPE_J:
+			return m_tetriminoTypeJTile;
+		case Tetrimino.eTetriminoType.TYPE_Z:
+			return m_tetriminoTypeZTile;
+		case Tetrimino.eTetriminoType.TYPE_S:
+			return m_tetriminoTypeSTile;
+		case Tetrimino.eTetriminoType.BLANK:
+		default: return m_backgroundTileA; 
+		}
 	}
 }
