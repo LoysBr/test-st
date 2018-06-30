@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameplayManager : MonoBehaviour {
+public class GameFlowManager : MonoBehaviour {
 
 	public GridRenderingManager 	m_gridRenderer;
 	public MenuManager 				m_menuManager;
@@ -14,6 +14,8 @@ public class GameplayManager : MonoBehaviour {
 	public void ClearCurrentGame()
 	{
 		m_gameInstance = null;
+
+		m_gridRenderer.ClearGrid();
 
 		Debug.Log("ClearCurrentGame()");
 	}
@@ -68,15 +70,19 @@ public class GameplayManager : MonoBehaviour {
 
 	public void OnInput_Up()
 	{
+		m_gameInstance.TurnTetrimino();
 	}
 	public void OnInput_Left()
 	{
+		m_gameInstance.MoveTetriminoLeft();
 	}
 	public void OnInput_Right()
 	{
+		m_gameInstance.MoveTetriminoRight();
 	}
 	public void OnInput_Down()
 	{
+		m_gameInstance.MoveTetriminoDown();
 	}
 	public void OnInput_Escape()
 	{

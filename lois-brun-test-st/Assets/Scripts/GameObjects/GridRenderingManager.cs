@@ -5,7 +5,7 @@ using UnityEngine.Tilemaps;
 
 public class GridRenderingManager : MonoBehaviour {
 
-	public GameplayManager 	m_gameplayManager;
+	public GameFlowManager 	m_gameflowManager;
 
 	public Tilemap 			m_tileMap;
 	public Tile 			m_backgroundTileA;
@@ -29,7 +29,7 @@ public class GridRenderingManager : MonoBehaviour {
 		{
 			for(int j = 0; j < m_gridSizeY; j++)
 			{
-				Tetrimino.eTetriminoType tetriType = m_gameplayManager.GetCellTetriminoType(i, j);
+				Tetrimino.eTetriminoType tetriType = m_gameflowManager.GetCellTetriminoType(i, j);
 
 				Tile tile = m_tileMap.GetTile(new Vector3Int(i, j, 0)) as Tile;
 
@@ -59,6 +59,11 @@ public class GridRenderingManager : MonoBehaviour {
 		}
 
 		Debug.Log("InitializeGrid()");
+	}
+
+	public void ClearGrid()
+	{
+		InitializeGrid(m_gridSizeX, m_gridSizeY);
 	}
 
 	public Tile GetTetriminoTile( Tetrimino.eTetriminoType _tetriminoType)

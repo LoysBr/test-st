@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MenuManager : MonoBehaviour {
 
-	public GameplayManager gameplayManager;
+	public GameFlowManager m_gameflowManager;
 
 	void Update () {
 		
@@ -14,23 +14,23 @@ public class MenuManager : MonoBehaviour {
 	{
 		Debug.Log("Pause button clicked");
 
-		gameplayManager.PauseGame();
+		m_gameflowManager.PauseGame();
 	}
 
 	public void OnClicked_EndGame()
 	{
 		Debug.Log("EndGame button clicked");
 
-		gameplayManager.SaveGame();
-		gameplayManager.ClearCurrentGame();
+		m_gameflowManager.SaveGame();
+		m_gameflowManager.ClearCurrentGame();
 	}
 	public void OnClicked_NewGame()
 	{
 		Debug.Log("NewGame button clicked");
 
-		gameplayManager.SaveGame();
-		gameplayManager.ClearCurrentGame();
-		gameplayManager.StartNewGame();
+		m_gameflowManager.SaveGame();
+		m_gameflowManager.ClearCurrentGame();
+		m_gameflowManager.StartNewGame();
 	}
 	public void OnClicked_Quit()
 	{

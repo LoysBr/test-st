@@ -28,4 +28,13 @@ public class Cell {
 	{
 		return m_tetriminoType;
 	}
+
+	public void SetCellType(eCellType _type)
+	{
+		 m_type = _type;
+	}
+	public void SetCellTetriminoType(Tetrimino.eTetriminoType _type)
+	{
+		m_tetriminoType = _type;
+	}
 }

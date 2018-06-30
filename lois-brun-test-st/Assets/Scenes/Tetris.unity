@@ -628,7 +628,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b122520a8f1dbd4195b5a82b482adf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_gameplayManager: {fileID: 497854149}
+  m_gameflowManager: {fileID: 497854149}
   m_tileMap: {fileID: 390960622}
   m_backgroundTileA: {fileID: 11400000, guid: 2037b853592c9784f9cddb782b5e6b59, type: 2}
   m_backgroundTileB: {fileID: 11400000, guid: 4156b1bf0f1f4334c8e721413f036610, type: 2}
@@ -867,7 +867,7 @@ GameObject:
   - component: {fileID: 497854150}
   - component: {fileID: 497854149}
   m_Layer: 0
-  m_Name: GameplayManager
+  m_Name: GameFlowManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -881,7 +881,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 497854148}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33d95860ff9552e40b4efa417452747f, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e6666b2e8530474797c39719b3b057f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_gridRenderer: {fileID: 238586931}
@@ -1198,7 +1198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02e3fcdb96044d54b8e65f807eb02539, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameplayManager: {fileID: 497854149}
+  m_gameflowManager: {fileID: 497854149}
 --- !u!4 &1114343950
 Transform:
   m_ObjectHideFlags: 0
