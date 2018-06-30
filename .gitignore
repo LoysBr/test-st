@@ -1,0 +1,33 @@
+lois-brun-test-st/Temp/UnityLockFile
+
+lois-brun-test-st/[Ll]ibrary/
+lois-brun-test-st/[Tt]emp/
+lois-brun-test-st/[Oo]bj/
+lois-brun-test-st/[Bb]uild/
+lois-brun-test-st/[Bb]uilds/
+lois-brun-test-st/Assets/AssetStoreTools*
+
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+
+# Unity3D generated meta files
+*.pidb.meta
+*.pdb.meta
+
+# Unity3D Generated File On Crash Reports
+lois-brun-test-st/sysinfo.txt
+
+# Builds
+*.apk
+*.unitypackage
