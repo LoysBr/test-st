@@ -6,14 +6,15 @@ using System;
 public class Tetrimino {
 	
 	public List<Matrix4x4> 	m_configurations;
+
 	private int 			m_currentConfigIndex;
 	private Vector2Int 		m_position;
-	private Vector2Int 		m_previousPosition;
+	private List<Vector2Int> m_previousCellsPositions;
 
 	public Tetrimino()
 	{
 		m_configurations = new List<Matrix4x4>();
-		m_previousPosition = new Vector2Int(-99, -99);
+		m_previousCellsPositions = new List<Vector2Int>();
 		m_position = new Vector2Int(-99, -99);
 
 		//random Type at creation;
@@ -156,7 +157,7 @@ public class Tetrimino {
 
 	public void SetPosition(Vector2Int _pos)
 	{
-		m_previousPosition = m_position;
+		m_previousCellsPositions = GetCurrentCellsPositions();
 		m_position = _pos;
 	}
 
@@ -167,6 +168,8 @@ public class Tetrimino {
 
 	public void Turn()
 	{		
+		m_previousCellsPositions = GetCurrentCellsPositions();
+
 		m_currentConfigIndex++;
 		if(m_currentConfigIndex >= m_configurations.Count) 
 			m_currentConfigIndex = 0;
@@ -177,16 +180,12 @@ public class Tetrimino {
 		return m_configurations[m_currentConfigIndex];
 	}	
 
-	public List<Vector2Int> GetCurrentCellPositions()
+	public List<Vector2Int> GetCurrentCellsPositions()
 	{
-		return GetCellPositions(m_position);
-	}
-	public List<Vector2Int> GetPreviousCellPositions()
-	{
-		return GetCellPositions(m_previousPosition);
+		return GetCellsPositions(m_position);
 	}
 
-	public List<Vector2Int> GetCellPositions(Vector2Int _pos)
+	public List<Vector2Int> GetCellsPositions(Vector2Int _pos)
 	{
 		List<Vector2Int> cells = new List<Vector2Int>();
 
@@ -204,6 +203,11 @@ public class Tetrimino {
 		}
 
 		return cells;
+	}
+
+	public List<Vector2Int> GetPreviousCellsPositions()
+	{
+		return m_previousCellsPositions;
 	}
 
 	//return current lowest Y pos (0 to 4)

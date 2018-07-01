@@ -11,6 +11,11 @@ public class GameFlowManager : MonoBehaviour {
 	public int 						m_gridSizeX = 10;
 	public int 						m_gridSizeY = 22;
 
+	public GridRenderingManager GetRenderingManager() 
+	{ 
+		return m_gridRenderer; 
+	}
+
 	public void ClearCurrentGame()
 	{
 		m_gameInstance = null;
@@ -21,7 +26,7 @@ public class GameFlowManager : MonoBehaviour {
 	}
 	public void StartNewGame()
 	{
-		m_gameInstance = new GameInstance(m_gridSizeX, m_gridSizeY);
+		m_gameInstance = new GameInstance(m_gridSizeX, m_gridSizeY, m_gridRenderer.Refresh);
 
 		m_gridRenderer.InitializeGrid(m_gridSizeX, m_gridSizeY);
 

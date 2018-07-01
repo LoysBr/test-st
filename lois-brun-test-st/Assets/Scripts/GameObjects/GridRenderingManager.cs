@@ -22,7 +22,7 @@ public class GridRenderingManager : MonoBehaviour {
 	private int 			m_gridSizeX;
 	private int 			m_gridSizeY;
 
-	void Update () 
+	public bool Refresh() 
 	{
 		//for each tile of tileMap, refresh its color depending on GameGrid's Cell TetriminoType 
 		for(int i = 0; i < m_gridSizeX; i++)
@@ -41,6 +41,8 @@ public class GridRenderingManager : MonoBehaviour {
 				m_tileMap.SetTile(new Vector3Int(i, j, 0), tile);
 			}
 		} 
+
+		return true;
 	}
 
 	public void InitializeGrid(int _gridSizeX, int _gridSizeY)

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameGrid  {
 
@@ -11,12 +12,14 @@ public class GameGrid  {
 	//private Vector2Int 		m_tetriminoPosition;
 	private Tetrimino 		m_currentTetrimino;
 
-	//public GridRenderingManager
+	Func<bool> 				RefreshRendering;
 
-	public GameGrid(int _gridSizeX, int _gridSizeY)
+	public GameGrid(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod)
 	{
 		m_gridSizeY = _gridSizeY;
 		m_gridSizeX = _gridSizeX;
+		RefreshRendering = _refreshRenderingMethod;
+
 		m_gridTab = new Cell[m_gridSizeX, m_gridSizeY];
 
 		for(int x = 0; x < m_gridSizeX; x++)
@@ -70,84 +73,84 @@ public class GameGrid  {
 
 	public void MoveTetriminoLeft()
 	{
-		if(CanMoveTetriminoLeft())
-			m_currentTetrimino.SetPosition(new Vector2Int(m_currentTetrimino.GetPosition().x - 1, m_currentTetrimino.GetPosition().y));
+		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x - 1, m_currentTetrimino.GetPosition().y);
+		if(CanThoseCellsMove(futurePos))
+		{			
+			m_currentTetrimino.SetPosition(futurePos);
+			UpdateGrid();
+		}
 	}
 
 	public void MoveTetriminoRight()
 	{
-		if(CanMoveTetriminoRight())
-			m_currentTetrimino.SetPosition(new Vector2Int(m_currentTetrimino.GetPosition().x + 1, m_currentTetrimino.GetPosition().y));
+		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x + 1, m_currentTetrimino.GetPosition().y);
+		if(CanThoseCellsMove(futurePos))
+		{			
+			m_currentTetrimino.SetPosition(futurePos);
+			UpdateGrid();
+		}
 	}
 
 	public bool MoveTetriminoDown()
 	{
-		if(CanMoveTetriminoDown())
-		{			
-			m_currentTetrimino.SetPosition(new Vector2Int(m_currentTetrimino.GetPosition().x, m_currentTetrimino.GetPosition().y - 1));
-			return true;
+		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x, m_currentTetrimino.GetPosition().y - 1);
+
+		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(futurePos))
+		{
+			if(pos.y < 0) //ground check
+				return false;	
+			
+			//if it's a grid cell
+			if(PositionIsInsideGrid(pos))
+			{
+				Cell cell = m_gridTab[pos.x, pos.y];
+				if(cell.GetCellType() == Cell.eCellType.GRID_CELL)
+					return false;				
+			}						
 		}
+
+		m_currentTetrimino.SetPosition(futurePos);
+		UpdateGrid();
+		return true;
+	}
+
+	public bool CanThoseCellsMove(Vector2Int _futurePos)
+	{
+		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(_futurePos))
+		{	
+			if(PositionIsInsideGrid(pos))
+			{
+				if(m_gridTab[pos.x, pos.y].GetCellType() == Cell.eCellType.GRID_CELL)
+					return false;	
+			}
+			else 
+				return false; //out of limits 
+		}
+
+		return true;
+	}
+
+	public bool PositionIsInsideGrid(Vector2Int _pos)
+	{
+		if( _pos.x < m_gridSizeX && _pos.x >= 0 &&
+			_pos.y < m_gridSizeY && _pos.y >= 0)
+			return true;
 		else
 			return false;
-	}
-
-	public bool CanMoveTetriminoLeft()
-	{
-		//TODO
-		return true;
-	}
-	public bool CanMoveTetriminoRight()
-	{
-		//TODO
-		return true;
-	}
-	public bool CanMoveTetriminoDown()
-	{
-		if(m_currentTetrimino.GetPosition().y + m_currentTetrimino.GetBottomY() <= 0) //means pos = 0 or -1 and bottY 0 or 1
-			return false;
-
-		return true;
 	}
 
 	//returns number of lines (0 to 4)
 	public int UpdateGrid( bool _absorbTetrimino = false)
 	{
-		List<int> linesYIndex = new List<int>();
+		List<int> linesYIndex = new List<int>(); //will store lines
 
-//		//let's parse every cell of tetrimono's config
-//		for(int x = 0; x < 4; x++)
-//		{
-//			for(int y = 0; y < 4; y++)
-//			{
-//				//new Tetri position -> change Cell
-//				if(m_currentTetrimino.GetCurrentConfiguration()[x, y] == 1)
-//				{	
-//					if (y + m_tetriminoPosition.y < m_gridSizeY - 1) // TODO resovle null error here
-//					{
-//						m_gridTab[x + m_tetriminoPosition.x, y + m_tetriminoPosition.y].SetCellType(_absorbTetrimino ? Cell.eCellType.GRID_CELL : Cell.eCellType.TETRIMINO_CELL);
-//						m_gridTab[x + m_tetriminoPosition.x, y + m_tetriminoPosition.y].SetCellTetriminoType(m_currentTetrimino.GetTetriminoType());
-//					}
-//
-//					//check lines (maybe redundant but doesn't cost much...) 
-//					if(_absorbTetrimino)
-//					{
-//						if(IsMakingALine(m_tetriminoPosition.y + y)) 
-//						{
-//							if(!linesYIndex.Contains(m_tetriminoPosition.y + y))
-//								linesYIndex.Add(m_tetriminoPosition.y + y);
-//						}
-//					}
-//				}
-//			}
-//		}
-
-		List<Vector2Int> previousTetriminoCells = m_currentTetrimino.GetPreviousCellPositions();
-		List<Vector2Int> newTetriminoCells = m_currentTetrimino.GetCurrentCellPositions();
+		List<Vector2Int> previousTetriminoCells = m_currentTetrimino.GetPreviousCellsPositions();
+		List<Vector2Int> newTetriminoCells = m_currentTetrimino.GetCurrentCellsPositions();
 
 		//clear old ones
 		foreach(Vector2Int _pos in previousTetriminoCells)
 		{
-			if(_pos.x < m_gridSizeX && _pos.y < m_gridSizeY)
+			if(PositionIsInsideGrid(_pos))
 			{
 				m_gridTab[_pos.x, _pos.y].SetCellType(Cell.eCellType.BLANK);
 				m_gridTab[_pos.x, _pos.y].SetCellTetriminoType(Tetrimino.eTetriminoType.BLANK);
@@ -156,19 +159,19 @@ public class GameGrid  {
 		//set new ones
 		foreach(Vector2Int _pos in newTetriminoCells)
 		{
-			if(_pos.x < m_gridSizeX && _pos.y < m_gridSizeY)
+			if(PositionIsInsideGrid(_pos))
 			{
 				m_gridTab[_pos.x, _pos.y].SetCellType(_absorbTetrimino ? Cell.eCellType.GRID_CELL : Cell.eCellType.TETRIMINO_CELL);
 				m_gridTab[_pos.x, _pos.y].SetCellTetriminoType(m_currentTetrimino.GetTetriminoType());
-			}
 
-			//check lines (maybe redundant but doesn't cost much...) 
-			if(_absorbTetrimino)
-			{
-				if(IsMakingALine(_pos.y)) 
+				//check lines (maybe redundant but doesn't cost much...) 
+				if(_absorbTetrimino)
 				{
-					if(!linesYIndex.Contains(_pos.y))
-						linesYIndex.Add(_pos.y);
+					if(IsMakingALine(_pos.y)) 
+					{
+						if(!linesYIndex.Contains(_pos.y))
+							linesYIndex.Add(_pos.y);
+					}
 				}
 			}
 		}
@@ -178,11 +181,9 @@ public class GameGrid  {
 			RemoveLine(lineIndex);
 		}
 
-		return linesYIndex.Count;
-	}
+		RefreshRendering();
 
-	public void RefreshGridRendering()
-	{
+		return linesYIndex.Count;
 	}
 
 	public bool IsMakingALine(int _gridY)
@@ -209,12 +210,9 @@ public class GameGrid  {
 	public bool ProceedStep()
 	{
 		if(MoveTetriminoDown())
-		{
-			UpdateGrid(false);
 			return true;
-		}
 		else
-			return false;
+			return false;  //means we need to ProceedTurn
 	}
 
 	public void RemoveLine(int _lineY)

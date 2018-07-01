@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameInstance {
 
@@ -27,9 +28,9 @@ public class GameInstance {
 	private GameGrid 	m_grid;
 
 
-	public GameInstance(int _gridSizeX, int _gridSizeY) 
+	public GameInstance(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod) 
 	{
-		m_grid = new GameGrid(_gridSizeX, _gridSizeY);
+		m_grid = new GameGrid(_gridSizeX, _gridSizeY, _refreshRenderingMethod);
 		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino());
 	}
 
@@ -73,6 +74,7 @@ public class GameInstance {
 		//check if there are new lines created
 		int linesCount = m_grid.ProceedTurn(); //this will absorb current tetri
 		GrandPointsForLines(linesCount);
+		m_currentLines += linesCount;
 
 		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
 	}		
@@ -122,13 +124,11 @@ public class GameInstance {
 	public void MoveTetriminoLeft()
 	{
 		m_grid.MoveTetriminoLeft();
-		m_grid.UpdateGrid();
 	}
 
 	public void MoveTetriminoRight()
 	{
 		m_grid.MoveTetriminoRight();
-		m_grid.UpdateGrid();
 	}
 
 	public void MoveTetriminoDown()
