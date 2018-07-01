@@ -6,6 +6,7 @@ lois-brun-test-st/[Oo]bj/
 lois-brun-test-st/[Bb]uild/
 lois-brun-test-st/[Bb]uilds/
 lois-brun-test-st/Assets/AssetStoreTools*
+lois-brun-test-st/LastBuild/
 
 .consulo/
 *.csproj
@@ -31,3 +32,4 @@ lois-brun-test-st/sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+

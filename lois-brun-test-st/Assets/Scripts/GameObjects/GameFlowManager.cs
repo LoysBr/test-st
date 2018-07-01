@@ -85,7 +85,7 @@ public class GameFlowManager : MonoBehaviour {
 			OnInput_Left();
 		if(Input.GetKeyDown(KeyCode.RightArrow))
 			OnInput_Right();
-		if(Input.GetKeyDown(KeyCode.DownArrow))
+		if(Input.GetKey(KeyCode.DownArrow))
 			OnInput_Down();
 
 		if(!m_gameInstance.Update(Time.deltaTime))   //if return false : GameOver
