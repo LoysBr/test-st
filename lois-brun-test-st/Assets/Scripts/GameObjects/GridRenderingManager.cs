@@ -22,21 +22,23 @@ public class GridRenderingManager : MonoBehaviour {
 	private int 			m_gridSizeX;
 	private int 			m_gridSizeY;
 
-	void Update () {
-
-		//for each time of timeMap, refresh its color depending on GameGrid's Cell TetriminoType 
+	void Update () 
+	{
+		//for each tile of tileMap, refresh its color depending on GameGrid's Cell TetriminoType 
 		for(int i = 0; i < m_gridSizeX; i++)
 		{
 			for(int j = 0; j < m_gridSizeY; j++)
 			{
 				Tetrimino.eTetriminoType tetriType = m_gameflowManager.GetCellTetriminoType(i, j);
 
-				Tile tile = m_tileMap.GetTile(new Vector3Int(i, j, 0)) as Tile;
+				Tile tile = new Tile();
 
 				if(tetriType != Tetrimino.eTetriminoType.BLANK)
 					tile = GetTetriminoTile(tetriType);
 				else
 					tile = i % 2 == 0 ? m_backgroundTileA : m_backgroundTileB; //if there is no Cell, put background tiles
+
+				m_tileMap.SetTile(new Vector3Int(i, j, 0), tile);
 			}
 		} 
 	}

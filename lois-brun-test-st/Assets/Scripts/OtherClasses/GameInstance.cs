@@ -29,8 +29,8 @@ public class GameInstance {
 
 	public GameInstance(int _gridSizeX, int _gridSizeY) 
 	{
-		m_grid = new GameGrid(_gridSizeX, _gridSizeY, InstantiateNewTetrimino(_gridSizeY));
-		m_grid.OnInstantiateTetrimino();
+		m_grid = new GameGrid(_gridSizeX, _gridSizeY);
+		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino());
 	}
 
 	public void Update(float _elapsedTime)
@@ -42,7 +42,9 @@ public class GameInstance {
 
 		if(m_currentStepElapsedTime >= m_currentStepDuration)
 		{
-			m_grid.ProceedStep();
+			if(!m_grid.ProceedStep()) //if tetrimino is blocked -> proceedTurn
+				ProceedTurn();
+			
 			m_currentStepElapsedTime = 0;
 		}
 	}
@@ -52,9 +54,9 @@ public class GameInstance {
 		m_isPaused = !m_isPaused;
 	}
 
-	public Tetrimino InstantiateNewTetrimino(int _gridSizeY)
+	public Tetrimino InstantiateNewTetrimino()
 	{
-		m_currentTetrimino = new Tetrimino(_gridSizeY);
+		m_currentTetrimino = new Tetrimino();
 		return m_currentTetrimino;
 	}
 
@@ -69,10 +71,10 @@ public class GameInstance {
 			IncrementLevel();
 
 		//check if there are new lines created
-		int linesCount = m_grid.ProceedTurn(m_currentTetrimino);
+		int linesCount = m_grid.ProceedTurn(); //this will absorb current tetri
 		GrandPointsForLines(linesCount);
 
-		InstantiateNewTetrimino(m_grid.GetGridSizeY());
+		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
 	}		
 
 	public void IncrementLevel()
@@ -114,28 +116,27 @@ public class GameInstance {
 	public void TurnTetrimino()
 	{
 		m_currentTetrimino.Turn();
-		m_grid.UpdateGrid(m_currentTetrimino);
+		m_grid.UpdateGrid();
 	}
 
 	public void MoveTetriminoLeft()
 	{
 		m_grid.MoveTetriminoLeft();
-		m_grid.UpdateGrid(m_currentTetrimino);
+		m_grid.UpdateGrid();
 	}
 
 	public void MoveTetriminoRight()
 	{
 		m_grid.MoveTetriminoRight();
-		m_grid.UpdateGrid(m_currentTetrimino);
+		m_grid.UpdateGrid();
 	}
 
 	public void MoveTetriminoDown()
 	{
 		//TODO : améliorer input / diff instant down avec long down
 		if(!m_grid.MoveTetriminoDown())
-		{						
+		{		
 			ProceedTurn();
-			m_grid.UpdateGrid(m_currentTetrimino);
 		}
 	}
 }

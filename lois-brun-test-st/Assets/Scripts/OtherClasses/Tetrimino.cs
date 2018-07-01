@@ -7,10 +7,14 @@ public class Tetrimino {
 	
 	public List<Matrix4x4> 	m_configurations;
 	private int 			m_currentConfigIndex;
+	private Vector2Int 		m_position;
+	private Vector2Int 		m_previousPosition;
 
-	public Tetrimino(int _gridSizeY)
+	public Tetrimino()
 	{
 		m_configurations = new List<Matrix4x4>();
+		m_previousPosition = new Vector2Int(-99, -99);
+		m_position = new Vector2Int(-99, -99);
 
 		//random Type at creation;
 		int intMin = (int) eTetriminoType.TYPE_I;
@@ -150,6 +154,17 @@ public class Tetrimino {
 		return m_type;
 	}
 
+	public void SetPosition(Vector2Int _pos)
+	{
+		m_previousPosition = m_position;
+		m_position = _pos;
+	}
+
+	public Vector2Int GetPosition()
+	{
+		return m_position;
+	}
+
 	public void Turn()
 	{		
 		m_currentConfigIndex++;
@@ -161,6 +176,35 @@ public class Tetrimino {
 	{
 		return m_configurations[m_currentConfigIndex];
 	}	
+
+	public List<Vector2Int> GetCurrentCellPositions()
+	{
+		return GetCellPositions(m_position);
+	}
+	public List<Vector2Int> GetPreviousCellPositions()
+	{
+		return GetCellPositions(m_previousPosition);
+	}
+
+	public List<Vector2Int> GetCellPositions(Vector2Int _pos)
+	{
+		List<Vector2Int> cells = new List<Vector2Int>();
+
+		//let's parse every cell of tetrimono's config
+		for(int x = 0; x < 4; x++)
+		{
+			for(int y = 0; y < 4; y++)
+			{
+				//new Tetri position -> change Cell
+				if(GetCurrentConfiguration()[x, y] == 1)
+				{	
+					cells.Add(new Vector2Int(x + _pos.x, y + _pos.y));
+				}
+			}
+		}
+
+		return cells;
+	}
 
 	//return current lowest Y pos (0 to 4)
 	public int GetBottomY()
