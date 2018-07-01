@@ -11,9 +11,12 @@ public class MenuManager : MonoBehaviour {
 	public Text 			m_levelText;
 	public Text 			m_linesCountText;
 
+	public GameObject		m_gameOverPanel;
+
 	public void Start()
 	{
 		InitUIGameValues();
+		GameOver(false);
 	}
 
 	public void InitUIGameValues()
@@ -23,6 +26,10 @@ public class MenuManager : MonoBehaviour {
 		m_linesCountText.text = "Lines: 0";
 	}
 
+	public void GameOver(bool _bool)
+	{
+		m_gameOverPanel.SetActive(_bool);
+	}
 	public void RefreshUIGameValues(GameInstance _game)
 	{
 		m_scoreText.text = "Score: " + _game.m_currentScore.ToString();
@@ -43,6 +50,7 @@ public class MenuManager : MonoBehaviour {
 
 		m_gameflowManager.SaveGame();
 		m_gameflowManager.ClearCurrentGame();
+		GameOver(true);
 	}
 	public void OnClicked_NewGame()
 	{

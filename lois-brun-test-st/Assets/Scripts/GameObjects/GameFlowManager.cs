@@ -23,6 +23,11 @@ public class GameFlowManager : MonoBehaviour {
 		return m_gridRenderer; 
 	}
 
+	public void Start()
+	{
+		m_gridRenderer.InitializeGrid(m_gridSizeX, m_gridSizeY);
+	}
+
 	public void ClearCurrentGame()
 	{
 		m_gameInstance = null;
@@ -42,6 +47,8 @@ public class GameFlowManager : MonoBehaviour {
 
 		m_gridRenderer.InitializeGrid(m_gridSizeX, m_gridSizeY);
 
+		m_menuManager.GameOver(false);
+
 		Debug.Log("StartNewGame ()");
 	}
 	public void PauseGame()
@@ -59,6 +66,7 @@ public class GameFlowManager : MonoBehaviour {
 	public void GameOver()
 	{
 		m_gameInstance.Pause(true);
+		m_menuManager.GameOver(true);
 		Debug.Log("GameOver ()");
 	}
 
