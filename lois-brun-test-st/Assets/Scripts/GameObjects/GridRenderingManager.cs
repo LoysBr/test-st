@@ -31,7 +31,7 @@ public class GridRenderingManager : MonoBehaviour {
 			{
 				Tetrimino.eTetriminoType tetriType = m_gameflowManager.GetCellTetriminoType(i, j);
 
-				Tile tile = new Tile();
+				Tile tile = m_tileMap.GetTile(new Vector3Int(i, j, 0)) as Tile;
 
 				if(tetriType != Tetrimino.eTetriminoType.BLANK)
 					tile = GetTetriminoTile(tetriType);

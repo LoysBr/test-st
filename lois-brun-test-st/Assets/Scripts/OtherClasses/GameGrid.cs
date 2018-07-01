@@ -194,7 +194,7 @@ public class GameGrid  {
 			if(m_gridTab[xIndex, _gridY].GetCellType() != Cell.eCellType.BLANK)
 			{
 				cellCount++;
-				if(cellCount >= GetGridSizeY())
+				if(cellCount >= GetGridSizeX())
 					return true;				
 			}
 		}
@@ -214,7 +214,7 @@ public class GameGrid  {
 		else
 			return false;  //means we need to ProceedTurn
 	}
-
+		 
 	public void RemoveLine(int _lineY)
 	{
 		//for each Cell with Y >= _lineY, do x = x + 1
@@ -224,7 +224,7 @@ public class GameGrid  {
 				m_gridTab[x, y] = m_gridTab[x, y + 1];
 
 			//for last row (top) -> make new 
-			m_gridTab[x, m_gridSizeY] = new Cell();
+			m_gridTab[x, m_gridSizeY - 1] = new Cell();
 		}
 
 		Debug.Log("Removed line " + _lineY);

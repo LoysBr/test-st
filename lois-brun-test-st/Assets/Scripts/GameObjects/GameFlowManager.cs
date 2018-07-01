@@ -44,15 +44,21 @@ public class GameFlowManager : MonoBehaviour {
 		Debug.Log("Save Game ()");
 	}
 
+	public void GameOver()
+	{
+		m_gameInstance.Pause(true);
+		Debug.Log("GameOver ()");
+	}
+
 	void Update () {
 		if(Input.GetKeyUp(KeyCode.Escape))
 			OnInput_Escape();
 
 		if(m_gameInstance == null)
 			return;
-
-		m_gameInstance.Update(Time.deltaTime);
-
+		if(m_gameInstance.m_gameOver)
+			return;
+		
 		if(Input.GetKeyDown(KeyCode.UpArrow))
 			OnInput_Up();
 		if(Input.GetKeyDown(KeyCode.LeftArrow))
@@ -61,6 +67,9 @@ public class GameFlowManager : MonoBehaviour {
 			OnInput_Right();
 		if(Input.GetKeyDown(KeyCode.DownArrow))
 			OnInput_Down();
+
+		if(!m_gameInstance.Update(Time.deltaTime))   //if return false : GameOver
+			GameOver();
 	}
 
 	public Tetrimino.eTetriminoType GetCellTetriminoType(int _x, int _y)
@@ -93,6 +102,4 @@ public class GameFlowManager : MonoBehaviour {
 	{
 		m_menuManager.Quit();
 	}
-
-
 }

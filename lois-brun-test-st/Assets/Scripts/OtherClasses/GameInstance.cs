@@ -8,7 +8,7 @@ public class GameInstance {
 	//a Turn is spent each time Tetriminos touches ground
 	//a Step is the time between 2 tetrimino "falling step"
 
-	private float 		m_currentStepDuration = 1;
+	private float 		m_currentStepDuration = 0.4f;
 	private float 		m_currentStepElapsedTime;
 	private int 		m_turnsCount;
 
@@ -24,6 +24,8 @@ public class GameInstance {
 	private int 		m_currentLines = 0;
 	private int 		m_currentPoints = 0;
 
+	public bool 		m_gameOver = false;
+
 	private Tetrimino 	m_currentTetrimino;
 	private GameGrid 	m_grid;
 
@@ -34,9 +36,10 @@ public class GameInstance {
 		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino());
 	}
 
-	public void Update(float _elapsedTime)
+	public bool Update(float _elapsedTime)
 	{
-		if(m_isPaused) return;
+		if(m_gameOver) return false;
+		if(m_isPaused) return true;
 
 		m_currentTime += _elapsedTime;
 		m_currentStepElapsedTime += _elapsedTime;
@@ -44,14 +47,26 @@ public class GameInstance {
 		if(m_currentStepElapsedTime >= m_currentStepDuration)
 		{
 			if(!m_grid.ProceedStep()) //if tetrimino is blocked -> proceedTurn
-				ProceedTurn();
+			{
+				if(!ProceedTurn())
+					return false;
+			}
 			
 			m_currentStepElapsedTime = 0;
 		}
+
+		return true;
 	}
 
-	public void Pause()
+	public void Pause(bool gameOver = false)
 	{
+		if(gameOver)
+		{
+			m_isPaused = true;
+			m_gameOver = true;
+			return;
+		}
+		
 		m_isPaused = !m_isPaused;
 	}
 
@@ -61,8 +76,18 @@ public class GameInstance {
 		return m_currentTetrimino;
 	}
 
-	public void ProceedTurn()
+	public bool ProceedTurn()
 	{
+		//checking gameOver
+		int count = 0;
+		foreach(Vector2Int pos in m_currentTetrimino.GetCurrentCellsPositions())
+		{			
+			if(!m_grid.PositionIsInsideGrid(pos))	
+				count++;
+			if(count >= m_currentTetrimino.GetCurrentCellsPositions().Count)
+				return false;
+		}		
+
 		//increment turnsCount
 		m_turnsCount++;
 
@@ -77,6 +102,8 @@ public class GameInstance {
 		m_currentLines += linesCount;
 
 		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
+
+		return true;
 	}		
 
 	public void IncrementLevel()
@@ -134,9 +161,6 @@ public class GameInstance {
 	public void MoveTetriminoDown()
 	{
 		//TODO : améliorer input / diff instant down avec long down
-		if(!m_grid.MoveTetriminoDown())
-		{		
-			ProceedTurn();
-		}
+		m_grid.MoveTetriminoDown();
 	}
 }
