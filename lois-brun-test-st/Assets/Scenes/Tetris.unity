@@ -890,7 +890,8 @@ MonoBehaviour:
   m_gridSizeY: 22
   m_startingStepDuration: 1
   m_levelUpStepDurationDiminishing: 0.05
-  m_minimumStepDuration: 0.1
+  m_minTimeBetweenMoveDownInputs: 0.05
+  m_minimumStepDuration: 0.2
   m_startingPointsForLine: 10
   m_startingTotalPointsForTetris: 100
 --- !u!4 &497854150

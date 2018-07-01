@@ -14,9 +14,14 @@ public class GameFlowManager : MonoBehaviour {
 	//public int 					m_numberOfTurnToLevelUp = 2;
 	public float 					m_startingStepDuration = 1;
 	public float 					m_levelUpStepDurationDiminishing = 0.1f;
+	public float 					m_minTimeBetweenMoveDownInputs = 0.5f;
 	public float 					m_minimumStepDuration = 0.2f;
 	public int 						m_startingPointsForLine = 10;
 	public int 						m_startingTotalPointsForTetris = 100;
+
+	private float 					m_downInputDuration = 0;
+	private bool 					m_keepPressingDown;
+	private int 					m_numberOfDownRequest;
 
 	public GridRenderingManager GetRenderingManager() 
 	{ 
@@ -46,6 +51,10 @@ public class GameFlowManager : MonoBehaviour {
 		m_gameInstance.m_currentStepDuration = m_startingStepDuration;
 
 		m_gridRenderer.InitializeGrid(m_gridSizeX, m_gridSizeY);
+
+		m_downInputDuration = 0.0f;
+		m_keepPressingDown = false;
+		m_numberOfDownRequest = 0;
 
 		m_menuManager.GameOver(false);
 
@@ -86,7 +95,28 @@ public class GameFlowManager : MonoBehaviour {
 		if(Input.GetKeyDown(KeyCode.RightArrow))
 			OnInput_Right();
 		if(Input.GetKey(KeyCode.DownArrow))
-			OnInput_Down();
+		{
+			m_downInputDuration += Time.deltaTime;
+
+			if(m_downInputDuration >= m_minTimeBetweenMoveDownInputs)
+			{
+				m_keepPressingDown = true;
+				int n = (int) Mathf.Ceil(m_downInputDuration / m_minTimeBetweenMoveDownInputs);
+				if (n > m_numberOfDownRequest)
+				{
+					m_numberOfDownRequest = n;
+					OnInput_Down();
+				}
+			}
+			else if(Input.GetKeyDown(KeyCode.DownArrow))
+				OnInput_Down();
+		}
+		else
+		{	
+			m_downInputDuration = 0.0f;
+			m_keepPressingDown = false;
+			m_numberOfDownRequest = 0;
+		}
 
 		if(!m_gameInstance.Update(Time.deltaTime))   //if return false : GameOver
 			GameOver();
@@ -118,6 +148,7 @@ public class GameFlowManager : MonoBehaviour {
 	}
 	public void OnInput_Down()
 	{
+		
 		m_gameInstance.MoveTetriminoDown();
 	}
 	public void OnInput_Escape()
