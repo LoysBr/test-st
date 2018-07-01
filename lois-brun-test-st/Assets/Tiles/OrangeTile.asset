@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: OrangeTile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: f92f063ffaf284848b71ffa583a46de9, type: 3}
-  m_Color: {r: 0.8088235, g: 0.6144926, b: 0.19625865, a: 1}
+  m_Color: {r: 0.8897059, g: 0.6883941, b: 0.25513622, a: 1}
   m_Transform:
     e00: 1
     e01: 0

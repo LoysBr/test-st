@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: LightBlueTile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: f92f063ffaf284848b71ffa583a46de9, type: 3}
-  m_Color: {r: 0.34018168, g: 0.66231656, b: 0.8897059, a: 1}
+  m_Color: {r: 0.57093424, g: 0.663286, b: 0.88235295, a: 1}
   m_Transform:
     e00: 1
     e01: 0

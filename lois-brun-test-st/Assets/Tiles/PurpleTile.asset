@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: PurpleTile
   m_EditorClassIdentifier: 
   m_Sprite: {fileID: 21300000, guid: f92f063ffaf284848b71ffa583a46de9, type: 3}
-  m_Color: {r: 0.82015866, g: 0.13283956, b: 0.8602941, a: 1}
+  m_Color: {r: 0.71381694, g: 0.34602073, b: 0.7352941, a: 1}
   m_Transform:
     e00: 1
     e01: 0
