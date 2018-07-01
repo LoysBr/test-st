@@ -8,7 +8,7 @@ public class GameInstance {
 	//a Turn is spent each time Tetriminos touches ground
 	//a Step is the time between 2 tetrimino "falling step"
 
-	private float 		m_currentStepDuration = 0.4f;
+	public float 		m_currentStepDuration = 1f;
 	private float 		m_currentStepElapsedTime;
 	private int 		m_turnsCount;
 
@@ -19,10 +19,10 @@ public class GameInstance {
 	public int 			m_currentTotalPointsForTetris = 100;
 
 	private bool 		m_isPaused = false;
-	private float 		m_currentTime = 0.0f;
-	private int 		m_currentLevel = 1;
-	private int 		m_currentLines = 0;
-	private int 		m_currentPoints = 0;
+	public float 		m_currentTime = 0.0f;
+	public int 			m_currentLevel = 1;
+	public int 			m_currentLines = 0;
+	public int 			m_currentScore = 0;
 
 	public bool 		m_gameOver = false;
 
@@ -112,6 +112,9 @@ public class GameInstance {
 		m_currentStepDuration -= m_levelUpStepDurationDiminishing;
 		if(m_currentStepDuration <= m_minimumStepDuration)
 			m_currentStepDuration = m_minimumStepDuration;
+
+		m_currentPointsForLine *= 2; //we just double values -> we could tweak better
+		m_currentTotalPointsForTetris *= 2;
 	}
 
 	public void GrandPointsForLines(int _numberOfLines)
@@ -134,7 +137,7 @@ public class GameInstance {
 		default: break;
 		}
 
-		m_currentPoints += points;
+		m_currentScore += points;
 	}
 
 	public GameGrid GetGameGrid()

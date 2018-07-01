@@ -1,13 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MenuManager : MonoBehaviour {
 
-	public GameFlowManager m_gameflowManager;
+	public GameFlowManager 	m_gameflowManager;
 
-	void Update () {
-		
+	public Text 			m_scoreText;
+	public Text 			m_levelText;
+	public Text 			m_linesCountText;
+
+	public void Start()
+	{
+		InitUIGameValues();
+	}
+
+	public void InitUIGameValues()
+	{
+		m_scoreText.text = "Score: 0";
+		m_levelText.text = "Level: 1";
+		m_linesCountText.text = "Lines: 0";
+	}
+
+	public void RefreshUIGameValues(GameInstance _game)
+	{
+		m_scoreText.text = "Score: " + _game.m_currentScore.ToString();
+		m_levelText.text = "Level: " + _game.m_currentLevel.ToString();
+		m_linesCountText.text = "Lines: " + _game.m_currentLines.ToString();
 	}
 
 	public void OnClicked_Pause()

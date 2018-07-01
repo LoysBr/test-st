@@ -11,6 +11,13 @@ public class GameFlowManager : MonoBehaviour {
 	public int 						m_gridSizeX = 10;
 	public int 						m_gridSizeY = 22;
 
+	//public int 					m_numberOfTurnToLevelUp = 2;
+	public float 					m_startingStepDuration = 1;
+	public float 					m_levelUpStepDurationDiminishing = 0.1f;
+	public float 					m_minimumStepDuration = 0.2f;
+	public int 						m_startingPointsForLine = 10;
+	public int 						m_startingTotalPointsForTetris = 100;
+
 	public GridRenderingManager GetRenderingManager() 
 	{ 
 		return m_gridRenderer; 
@@ -27,6 +34,11 @@ public class GameFlowManager : MonoBehaviour {
 	public void StartNewGame()
 	{
 		m_gameInstance = new GameInstance(m_gridSizeX, m_gridSizeY, m_gridRenderer.Refresh);
+		m_gameInstance.m_levelUpStepDurationDiminishing = m_levelUpStepDurationDiminishing;
+		m_gameInstance.m_minimumStepDuration = m_minimumStepDuration;
+		m_gameInstance.m_currentPointsForLine = m_startingPointsForLine;
+		m_gameInstance.m_currentTotalPointsForTetris = m_startingTotalPointsForTetris;
+		m_gameInstance.m_currentStepDuration = m_startingStepDuration;
 
 		m_gridRenderer.InitializeGrid(m_gridSizeX, m_gridSizeY);
 
@@ -70,6 +82,8 @@ public class GameFlowManager : MonoBehaviour {
 
 		if(!m_gameInstance.Update(Time.deltaTime))   //if return false : GameOver
 			GameOver();
+
+		m_menuManager.RefreshUIGameValues(m_gameInstance);
 	}
 
 	public Tetrimino.eTetriminoType GetCellTetriminoType(int _x, int _y)
@@ -101,5 +115,15 @@ public class GameFlowManager : MonoBehaviour {
 	public void OnInput_Escape()
 	{
 		m_menuManager.Quit();
+	}
+
+	public int GetCurrentGameScore()
+	{
+		if(m_gameInstance != null)
+		{
+			return m_gameInstance.m_currentScore;
+		}
+		else
+			return 0;
 	}
 }
