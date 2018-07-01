@@ -95,7 +95,7 @@ public class GameGrid  {
 	{
 		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x, m_currentTetrimino.GetPosition().y - 1);
 
-		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(futurePos))
+		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(futurePos, m_currentTetrimino.GetCurrentConfiguration()))
 		{
 			if(pos.y < 0) //ground check
 				return false;	
@@ -116,7 +116,7 @@ public class GameGrid  {
 
 	public bool CanThoseCellsMove(Vector2Int _futurePos)
 	{
-		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(_futurePos))
+		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(_futurePos, m_currentTetrimino.GetCurrentConfiguration()))
 		{	
 			if(PositionIsInsideGrid(pos))
 			{
@@ -228,5 +228,17 @@ public class GameGrid  {
 		}
 
 		Debug.Log("Removed line " + _lineY);
+	}
+
+	public bool CanTetriminoTurn()
+	{
+		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(m_currentTetrimino.GetPosition(), 
+			m_currentTetrimino.GetNextConfiguration()))
+		{	
+			if(!PositionIsInsideGrid(pos))
+				return false;	
+		}
+
+		return true;
 	}
 }

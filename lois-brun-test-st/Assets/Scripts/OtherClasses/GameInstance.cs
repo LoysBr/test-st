@@ -144,8 +144,11 @@ public class GameInstance {
 
 	public void TurnTetrimino()
 	{
-		m_currentTetrimino.Turn();
-		m_grid.UpdateGrid();
+		if(m_grid.CanTetriminoTurn())
+		{
+			m_currentTetrimino.Turn();
+			m_grid.UpdateGrid();
+		}
 	}
 
 	public void MoveTetriminoLeft()

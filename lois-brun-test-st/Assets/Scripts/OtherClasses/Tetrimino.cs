@@ -180,12 +180,21 @@ public class Tetrimino {
 		return m_configurations[m_currentConfigIndex];
 	}	
 
+	public Matrix4x4 GetNextConfiguration()
+	{
+		int nextConfigIndex = m_currentConfigIndex + 1;
+		if(nextConfigIndex >= m_configurations.Count)
+			nextConfigIndex = 0;
+		
+		return m_configurations[nextConfigIndex];
+	}	
+
 	public List<Vector2Int> GetCurrentCellsPositions()
 	{
-		return GetCellsPositions(m_position);
+		return GetCellsPositions(m_position, GetCurrentConfiguration());
 	}
 
-	public List<Vector2Int> GetCellsPositions(Vector2Int _pos)
+	public List<Vector2Int> GetCellsPositions(Vector2Int _pos, Matrix4x4 _config)
 	{
 		List<Vector2Int> cells = new List<Vector2Int>();
 
@@ -195,7 +204,7 @@ public class Tetrimino {
 			for(int y = 0; y < 4; y++)
 			{
 				//new Tetri position -> change Cell
-				if(GetCurrentConfiguration()[x, y] == 1)
+				if(_config[x, y] == 1)
 				{	
 					cells.Add(new Vector2Int(x + _pos.x, y + _pos.y));
 				}
