@@ -29,10 +29,14 @@ public class GameInstance {
 	private Tetrimino 	m_currentTetrimino;
 	private GameGrid 	m_grid;
 
+    private List<Tetrimino.eTetriminoType> m_availableTetrimini;
 
-	public GameInstance(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod) 
+
+    public GameInstance(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod, ref List<Tetrimino.eTetriminoType> _availableTetrimini) 
 	{
-		m_grid = new GameGrid(_gridSizeX, _gridSizeY, _refreshRenderingMethod);
+        m_availableTetrimini = _availableTetrimini;
+
+        m_grid = new GameGrid(_gridSizeX, _gridSizeY, _refreshRenderingMethod);
 		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino());
 	}
 
@@ -72,7 +76,7 @@ public class GameInstance {
 
 	public Tetrimino InstantiateNewTetrimino()
 	{
-		m_currentTetrimino = new Tetrimino();
+		m_currentTetrimino = new Tetrimino(ref m_availableTetrimini);
 		return m_currentTetrimino;
 	}
 

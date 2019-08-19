@@ -11,16 +11,21 @@ public class Tetrimino {
 	private Vector2Int 		m_position;
 	private List<Vector2Int> m_previousCellsPositions;
 
-	public Tetrimino()
+	public Tetrimino(ref List<Tetrimino.eTetriminoType> _availableTetrimini)
 	{
 		m_configurations = new List<Matrix4x4>();
 		m_previousCellsPositions = new List<Vector2Int>();
 		m_position = new Vector2Int(-99, -99);
 
-		//random Type at creation;
-		int intMin = (int) eTetriminoType.TYPE_I;
-		int intMax = Enum.GetNames(typeof(eTetriminoType)).Length;
-		m_type = (eTetriminoType) UnityEngine.Random.Range(intMin, intMax);
+        //random Type at creation among _availableTetrimini list
+        int intMin = 0;
+        int intMax = _availableTetrimini.Count;
+        int typeIndex = UnityEngine.Random.Range(intMin, intMax);
+        m_type = _availableTetrimini[typeIndex];
+
+        //int intMin = (int) eTetriminoType.TYPE_I;
+		//int intMax = Enum.GetNames(typeof(eTetriminoType)).Length;
+		//m_type = (eTetriminoType) UnityEngine.Random.Range(intMin, intMax);
 
 		switch(m_type)
 		{

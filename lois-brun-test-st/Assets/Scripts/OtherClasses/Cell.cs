@@ -5,7 +5,7 @@ public class Cell {
 
 	public Cell()
 	{
-		m_type = eCellType.BLANK;
+		m_type = eCellType.EMPTY_CELL;
 		m_tetriminoType = Tetrimino.eTetriminoType.BLANK;
 	}
 
@@ -14,8 +14,8 @@ public class Cell {
 
 	public enum eCellType
 	{
-		BLANK,
-		GRID_CELL,
+		EMPTY_CELL,
+		BUSY_CELL,
 		TETRIMINO_CELL
 	}
 

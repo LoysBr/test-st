@@ -52,9 +52,9 @@ public class GameGrid  {
 
 		switch (cell.GetCellType())
 		{
-		case Cell.eCellType.BLANK:
+		case Cell.eCellType.EMPTY_CELL:
 			return Tetrimino.eTetriminoType.BLANK;
-		case Cell.eCellType.GRID_CELL:			
+		case Cell.eCellType.BUSY_CELL:			
 		case Cell.eCellType.TETRIMINO_CELL:
 			return cell.GetCellTetriminoType();
 		default:
@@ -104,7 +104,7 @@ public class GameGrid  {
 			if(PositionIsInsideGrid(pos))
 			{
 				Cell cell = m_gridTab[pos.x, pos.y];
-				if(cell.GetCellType() == Cell.eCellType.GRID_CELL)
+				if(cell.GetCellType() == Cell.eCellType.BUSY_CELL)
 					return false;				
 			}						
 		}
@@ -120,7 +120,7 @@ public class GameGrid  {
 		{	
 			if(PositionIsInsideGrid(pos))
 			{
-				if(m_gridTab[pos.x, pos.y].GetCellType() == Cell.eCellType.GRID_CELL)
+				if(m_gridTab[pos.x, pos.y].GetCellType() == Cell.eCellType.BUSY_CELL)
 					return false;	
 			}
 			else 
@@ -142,7 +142,7 @@ public class GameGrid  {
 	//returns number of lines (0 to 4)
 	public int UpdateGrid( bool _absorbTetrimino = false)
 	{
-		List<int> linesYIndex = new List<int>(); //will store lines
+		List<int> linesYIndex = new List<int>(); //will store lines to remove
 
 		List<Vector2Int> previousTetriminoCells = m_currentTetrimino.GetPreviousCellsPositions();
 		List<Vector2Int> newTetriminoCells = m_currentTetrimino.GetCurrentCellsPositions();
@@ -152,7 +152,7 @@ public class GameGrid  {
 		{
 			if(PositionIsInsideGrid(_pos))
 			{
-				m_gridTab[_pos.x, _pos.y].SetCellType(Cell.eCellType.BLANK);
+				m_gridTab[_pos.x, _pos.y].SetCellType(Cell.eCellType.EMPTY_CELL);
 				m_gridTab[_pos.x, _pos.y].SetCellTetriminoType(Tetrimino.eTetriminoType.BLANK);
 			}
 		}
@@ -161,7 +161,7 @@ public class GameGrid  {
 		{
 			if(PositionIsInsideGrid(_pos))
 			{
-				m_gridTab[_pos.x, _pos.y].SetCellType(_absorbTetrimino ? Cell.eCellType.GRID_CELL : Cell.eCellType.TETRIMINO_CELL);
+				m_gridTab[_pos.x, _pos.y].SetCellType(_absorbTetrimino ? Cell.eCellType.BUSY_CELL : Cell.eCellType.TETRIMINO_CELL);
 				m_gridTab[_pos.x, _pos.y].SetCellTetriminoType(m_currentTetrimino.GetTetriminoType());
 
 				//check lines (maybe redundant but doesn't cost much...) 
@@ -176,10 +176,19 @@ public class GameGrid  {
 			}
 		}
 
-		foreach(int lineIndex in linesYIndex)
+        //find lower line to remove
+        int lowerLineYtoRemove = m_gridSizeY;
+        foreach (int lineIndex in linesYIndex)
 		{
-			RemoveLine(lineIndex);
+            if (lineIndex < lowerLineYtoRemove)
+                lowerLineYtoRemove = lineIndex;
 		}
+
+        //then remove X time the same line
+        for(int i = 0; i < linesYIndex.Count; i++)
+        {
+            RemoveLine(lowerLineYtoRemove);
+        }
 
 		RefreshRendering();
 
@@ -191,7 +200,7 @@ public class GameGrid  {
 		int cellCount = 0;
 		for(int xIndex = 0; xIndex < GetGridSizeX(); xIndex++)
 		{
-			if(m_gridTab[xIndex, _gridY].GetCellType() != Cell.eCellType.BLANK)
+			if(m_gridTab[xIndex, _gridY].GetCellType() != Cell.eCellType.EMPTY_CELL)
 			{
 				cellCount++;
 				if(cellCount >= GetGridSizeX())
