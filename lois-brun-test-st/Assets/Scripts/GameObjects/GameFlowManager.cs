@@ -13,6 +13,9 @@ public class GameFlowManager : MonoBehaviour {
 
     public List<Tetrimino.eTetriminoType> m_availableTetrimini;
 
+    // testing CustomPropertyEditor
+    //public NewTetriTypeAttribute m_testNewTetri;
+
 	//public int 					m_numberOfTurnToLevelUp = 2;
 	public float 					m_startingStepDuration = 1;
 	public float 					m_levelUpStepDurationDiminishing = 0.1f;
@@ -45,7 +48,7 @@ public class GameFlowManager : MonoBehaviour {
 	}
 	public void StartNewGame()
 	{
-		m_gameInstance = new GameInstance(m_gridSizeX, m_gridSizeY, m_gridRenderer.Refresh, ref m_availableTetrimini);
+		m_gameInstance = new GameInstance(m_gridSizeX, m_gridSizeY, m_gridRenderer.Refresh, ref TweakingMenu.Instance.m_availableTetrimini);
 		m_gameInstance.m_levelUpStepDurationDiminishing = m_levelUpStepDurationDiminishing;
 		m_gameInstance.m_minimumStepDuration = m_minimumStepDuration;
 		m_gameInstance.m_currentPointsForLine = m_startingPointsForLine;

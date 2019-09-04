@@ -3,6 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/*  TESTING CUSTOM PROPERTY EDITOR
+[Serializable]
+public class NewTetriTypeAttribute : PropertyAttribute
+{
+    public int m_testInt;
+    public enum eNewTetriminoType
+    {
+        BLANK, //used for Cell which are empty
+        TYPE_I,
+        TYPE_O,
+        TYPE_T,
+        TYPE_L,
+        TYPE_J,
+        TYPE_Z,
+        TYPE_S,
+    }
+
+    public eNewTetriminoType m_type;
+
+    public NewTetriTypeAttribute()
+    {
+        m_type = eNewTetriminoType.TYPE_I;
+    }
+}
+*/
+
 public class Tetrimino {
 	
 	public List<Matrix4x4> 	m_configurations;

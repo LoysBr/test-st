@@ -32,9 +32,13 @@ public class GameInstance {
     private List<Tetrimino.eTetriminoType> m_availableTetrimini;
 
 
-    public GameInstance(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod, ref List<Tetrimino.eTetriminoType> _availableTetrimini) 
+    public GameInstance(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod, ref List<TweakingMenu.TetriminoTweak> _availableTetrimini) 
 	{
-        m_availableTetrimini = _availableTetrimini;
+        m_availableTetrimini = new List<Tetrimino.eTetriminoType>();
+        for (int i = 0; i < _availableTetrimini.Count; i++)
+        {
+            m_availableTetrimini.Add(_availableTetrimini[i].m_type);
+        }
 
         m_grid = new GameGrid(_gridSizeX, _gridSizeY, _refreshRenderingMethod);
 		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino());
