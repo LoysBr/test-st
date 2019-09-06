@@ -109,9 +109,7 @@ public class GameInstance {
 		GrandPointsForLines(linesCount);
 		m_currentLines += linesCount;
 
-		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
-
-		return true;
+		return m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
 	}		
 
 	public void IncrementLevel()

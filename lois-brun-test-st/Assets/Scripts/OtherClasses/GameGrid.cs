@@ -49,14 +49,21 @@ public class GameGrid  {
 		//m_tetriminoPosition = new Vector2Int();
 	}
 
-	public void OnInstantiateTetrimino(Tetrimino _currentTetrimino)
+	public bool OnInstantiateTetrimino(Tetrimino _newTetrimino)
 	{
-		m_currentTetrimino = _currentTetrimino;
+		m_currentTetrimino = _newTetrimino;
 
-		m_currentTetrimino.SetPosition(new Vector2Int(
-			Mathf.CeilToInt(((float) m_gridSizeX) * 0.5f) - 2, // - 2 is because tetri config is adding 0-4 x
-			m_gridSizeY - 1));
-	}
+        Vector2Int newPos = new Vector2Int(Mathf.CeilToInt(((float)m_gridSizeX) * 0.5f) - 2, // - 2 is because tetri config is adding 0-4 x
+                                           m_gridSizeY - 1);
+
+        if (GetStateOfThisPos(newPos, m_currentTetrimino.GetCurrentConfiguration()) == eStateOfTetriminoPos.INSIDE_BLANK)
+        {
+            m_currentTetrimino.SetPosition(newPos);
+            return true;
+        }
+        else
+            return false;
+    }
 
 	public Tetrimino.eTetriminoType GetCellTetriminoType(int _x, int _y)
 	{
