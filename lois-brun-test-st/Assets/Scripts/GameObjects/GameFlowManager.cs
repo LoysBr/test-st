@@ -11,12 +11,6 @@ public class GameFlowManager : MonoBehaviour {
 	public int 						m_gridSizeX = 10;
 	public int 						m_gridSizeY = 22;
 
-    public List<Tetrimino.eTetriminoType> m_availableTetrimini;
-
-    // testing CustomPropertyEditor
-    //public NewTetriTypeAttribute m_testNewTetri;
-
-	//public int 					m_numberOfTurnToLevelUp = 2;
 	public float 					m_startingStepDuration = 1;
 	public float 					m_levelUpStepDurationDiminishing = 0.1f;
 	public float 					m_minTimeBetweenMoveDownInputs = 0.5f;
