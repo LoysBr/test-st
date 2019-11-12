@@ -2,16 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public sealed class TweakingMenu : MonoBehaviour
+public class TweakingMenu : MonoBehaviour
 {
     public static TweakingMenu Instance = null;
-    //public static TweakingMenu Instance
-    //{
-    //    get
-    //    {
-    //        return m_instance;
-    //    }
-    //}
 
     public void Start()
     {

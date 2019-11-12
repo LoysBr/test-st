@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+/*
+ * Manage the m_gridTab, a grid a Cell. The Cell (0, 0) is the bottom left,
+ * The Cell (m_gridSizeX - 1, m_gridSizeY - 1) is the top right
+ * 
+ * */
+
 public class GameGrid  {
 
 	public Cell[,] 			m_gridTab;
@@ -13,6 +19,16 @@ public class GameGrid  {
 	private Tetrimino 		m_currentTetrimino;
 
 	Func<bool> 				RefreshRendering;
+
+    public enum eStateOfTetriminoPos
+    {
+        INSIDE_BLANK,
+        OUT_TOP,
+        OUT_LEFT,
+        OUT_RIGHT,
+        OUT_BOTTOM,
+        TOUCHING_BUSYCELL
+    }
 
 	public GameGrid(int _gridSizeX, int _gridSizeY, Func<bool> _refreshRenderingMethod)
 	{
@@ -33,14 +49,21 @@ public class GameGrid  {
 		//m_tetriminoPosition = new Vector2Int();
 	}
 
-	public void OnInstantiateTetrimino(Tetrimino _currentTetrimino)
+	public bool OnInstantiateTetrimino(Tetrimino _newTetrimino)
 	{
-		m_currentTetrimino = _currentTetrimino;
+		m_currentTetrimino = _newTetrimino;
 
-		m_currentTetrimino.SetPosition(new Vector2Int(
-			Mathf.CeilToInt(((float) m_gridSizeX) * 0.5f) - 2, // - 2 is because tetri config is adding 0-4 x
-			m_gridSizeY - 1));
-	}
+        Vector2Int newPos = new Vector2Int(Mathf.CeilToInt(((float)m_gridSizeX) * 0.5f) - 2, // - 2 is because tetri config is adding 0-4 x
+                                           m_gridSizeY - 1);
+
+        if (GetStateOfThisPos(newPos, m_currentTetrimino.GetCurrentConfiguration()) == eStateOfTetriminoPos.INSIDE_BLANK)
+        {
+            m_currentTetrimino.SetPosition(newPos);
+            return true;
+        }
+        else
+            return false;
+    }
 
 	public Tetrimino.eTetriminoType GetCellTetriminoType(int _x, int _y)
 	{
@@ -71,66 +94,112 @@ public class GameGrid  {
 		return m_gridSizeY;
 	}
 
-	public void MoveTetriminoLeft()
+	public bool TryMoveTetriminoLeft()
 	{
 		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x - 1, m_currentTetrimino.GetPosition().y);
-		if(CanThoseCellsMove(futurePos))
+		if(GetStateOfThisPos(futurePos, m_currentTetrimino.GetCurrentConfiguration()) == eStateOfTetriminoPos.INSIDE_BLANK)
 		{			
 			m_currentTetrimino.SetPosition(futurePos);
 			UpdateGrid();
-		}
+            return true;
+        }
+        return false;
 	}
 
-	public void MoveTetriminoRight()
+	public bool TryMoveTetriminoRight()
 	{
 		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x + 1, m_currentTetrimino.GetPosition().y);
-		if(CanThoseCellsMove(futurePos))
-		{			
+        if (GetStateOfThisPos(futurePos, m_currentTetrimino.GetCurrentConfiguration()) == eStateOfTetriminoPos.INSIDE_BLANK)
+        {			
 			m_currentTetrimino.SetPosition(futurePos);
 			UpdateGrid();
-		}
-	}
+            return true;
+        }
+        return false;
+    }
 
-	public bool MoveTetriminoDown()
+	public bool TryMoveTetriminoDown()
 	{
 		Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x, m_currentTetrimino.GetPosition().y - 1);
 
-		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(futurePos, m_currentTetrimino.GetCurrentConfiguration()))
-		{
-			if(pos.y < 0) //ground check
-				return false;	
-			
-			//if it's a grid cell
-			if(PositionIsInsideGrid(pos))
-			{
-				Cell cell = m_gridTab[pos.x, pos.y];
-				if(cell.GetCellType() == Cell.eCellType.BUSY_CELL)
-					return false;				
-			}						
-		}
-
-		m_currentTetrimino.SetPosition(futurePos);
-		UpdateGrid();
-		return true;
+        if (GetStateOfThisPos(futurePos, m_currentTetrimino.GetCurrentConfiguration()) == eStateOfTetriminoPos.INSIDE_BLANK)
+        {
+            m_currentTetrimino.SetPosition(futurePos);
+            UpdateGrid();
+            return true;
+        }
+        return false;
 	}
 
-	public bool CanThoseCellsMove(Vector2Int _futurePos)
+	public eStateOfTetriminoPos GetStateOfThisPos(Vector2Int _futurePos, Matrix4x4 _tetriminoConfiguration)
 	{
-		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(_futurePos, m_currentTetrimino.GetCurrentConfiguration()))
-		{	
-			if(PositionIsInsideGrid(pos))
-			{
-				if(m_gridTab[pos.x, pos.y].GetCellType() == Cell.eCellType.BUSY_CELL)
-					return false;	
-			}
-			else 
-				return false; //out of limits 
+		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(_futurePos, _tetriminoConfiguration))
+		{
+            if (PositionIsInsideGrid(pos))
+            {
+                if (m_gridTab[pos.x, pos.y].GetCellType() == Cell.eCellType.BUSY_CELL) //don't go into another tetri block
+                    return eStateOfTetriminoPos.TOUCHING_BUSYCELL;
+            }
+            else
+            {
+                if (pos.x < 0)
+                    return eStateOfTetriminoPos.OUT_LEFT;
+                else if (pos.x > m_gridSizeX - 1)
+                    return eStateOfTetriminoPos.OUT_RIGHT;
+                else if (pos.y < 0)
+                    return eStateOfTetriminoPos.OUT_BOTTOM;
+            }
 		}
 
-		return true;
+		return eStateOfTetriminoPos.INSIDE_BLANK;
 	}
 
-	public bool PositionIsInsideGrid(Vector2Int _pos)
+    public bool TryToTurnTetrimino()
+    {
+        bool doTurn = false;
+
+        eStateOfTetriminoPos state = GetStateOfThisPos(m_currentTetrimino.GetPosition(), m_currentTetrimino.GetNextConfiguration());
+        if (state == eStateOfTetriminoPos.INSIDE_BLANK)
+        {            
+            doTurn = true;
+        }
+        //in case it's OUT_LEFT / RIGHT, let's try to move it so it snaps the wall
+        else if (state == eStateOfTetriminoPos.OUT_LEFT) 
+        {
+            Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x + 1, m_currentTetrimino.GetPosition().y);
+            eStateOfTetriminoPos newState = GetStateOfThisPos(futurePos, m_currentTetrimino.GetNextConfiguration());
+
+            if (newState == eStateOfTetriminoPos.INSIDE_BLANK)
+            {
+                m_currentTetrimino.SetPosition(futurePos);
+                UpdateGrid();
+                doTurn = true;
+            }
+        }
+        else if (state == eStateOfTetriminoPos.OUT_RIGHT)
+        {
+            Vector2Int futurePos = new Vector2Int(m_currentTetrimino.GetPosition().x - 1, m_currentTetrimino.GetPosition().y);
+            eStateOfTetriminoPos newState = GetStateOfThisPos(futurePos, m_currentTetrimino.GetNextConfiguration());
+
+            if (newState == eStateOfTetriminoPos.INSIDE_BLANK)
+            {
+                m_currentTetrimino.SetPosition(futurePos);
+                UpdateGrid();
+                doTurn = true;
+            }
+        }
+
+        if (doTurn)
+        {
+            m_currentTetrimino.Turn();
+            UpdateGrid();
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool PositionIsInsideGrid(Vector2Int _pos)
 	{
 		if( _pos.x < m_gridSizeX && _pos.x >= 0 &&
 			_pos.y < m_gridSizeY && _pos.y >= 0)
@@ -218,7 +287,7 @@ public class GameGrid  {
 
 	public bool ProceedStep()
 	{
-		if(MoveTetriminoDown())
+		if(TryMoveTetriminoDown())
 			return true;
 		else
 			return false;  //means we need to ProceedTurn
@@ -237,17 +306,5 @@ public class GameGrid  {
 		}
 
 		Debug.Log("Removed line " + _lineY);
-	}
-
-	public bool CanTetriminoTurn()
-	{
-		foreach(Vector2Int pos in m_currentTetrimino.GetCellsPositions(m_currentTetrimino.GetPosition(), 
-			m_currentTetrimino.GetNextConfiguration()))
-		{	
-			if(!PositionIsInsideGrid(pos))
-				return false;	
-		}
-
-		return true;
 	}
 }

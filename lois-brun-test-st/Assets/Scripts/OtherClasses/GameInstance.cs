@@ -110,9 +110,7 @@ public class GameInstance {
 		GrandPointsForLines(linesCount);
 		m_currentLines += linesCount;
 
-		m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
-
-		return true;
+		return m_grid.OnInstantiateTetrimino(InstantiateNewTetrimino()); //then create the new tetri
 	}		
 
 	public void IncrementLevel()
@@ -156,26 +154,22 @@ public class GameInstance {
 
 	public void TurnTetrimino()
 	{
-		if(m_grid.CanTetriminoTurn())
-		{
-			m_currentTetrimino.Turn();
-			m_grid.UpdateGrid();
-		}
+        m_grid.TryToTurnTetrimino();		
 	}
 
 	public void MoveTetriminoLeft()
 	{
-		m_grid.MoveTetriminoLeft();
+		m_grid.TryMoveTetriminoLeft();
 	}
 
 	public void MoveTetriminoRight()
 	{
-		m_grid.MoveTetriminoRight();
+		m_grid.TryMoveTetriminoRight();
 	}
 
 	public void MoveTetriminoDown()
 	{
 		//TODO : améliorer input / diff instant down avec long down
-		m_grid.MoveTetriminoDown();
+		m_grid.TryMoveTetriminoDown();
 	}
 }
