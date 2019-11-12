@@ -30,13 +30,17 @@ public class NewTetriTypeAttribute : PropertyAttribute
 */
 
 public class Tetrimino {
-	
+
+    //new
+    public Color            m_color;
+
 	public List<Matrix4x4> 	m_configurations;
 
 	private int 			m_currentConfigIndex;
 	private Vector2Int 		m_position;
 	private List<Vector2Int> m_previousCellsPositions;
 
+    //CHANGE : on lui passe directement une List<Matrix4x4> !
 	public Tetrimino(ref List<Tetrimino.eTetriminoType> _availableTetrimini)
 	{
 		m_configurations = new List<Matrix4x4>();
@@ -69,97 +73,97 @@ public class Tetrimino {
 			break;
 		case eTetriminoType.TYPE_O:			
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 0, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 0, 0, 0), 		
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 0, 0, 0)));
 			break;
 		case eTetriminoType.TYPE_S:			
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 0, 0), 		
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 0, 1, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 1, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 1, 0), 		
 				new Vector4( 1, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			break;
 		case eTetriminoType.TYPE_Z:			
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 0, 1, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 0, 1, 0), 		
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 1, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 1, 1, 0, 0), 		
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 0, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			break;
 		case eTetriminoType.TYPE_L:			
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 0, 0), 		
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 0, 1, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 0, 1, 0), 		
 				new Vector4( 1, 1, 1, 0),
 				new Vector4( 0, 0, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 1, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 1, 1, 0, 0), 		
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 1, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 0, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 0, 0, 0), 		
 				new Vector4( 1, 1, 1, 0),
 				new Vector4( 1, 0, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			break;
 		case eTetriminoType.TYPE_J:			
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 1, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 1, 0), 		
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 1, 0, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 1, 0, 0, 0), 		
 				new Vector4( 1, 1, 1, 0),
 				new Vector4( 0, 0, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 0, 0), 		
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 1, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 0, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 0, 0, 0), 		
 				new Vector4( 1, 1, 1, 0),
 				new Vector4( 0, 0, 1, 0),
 				new Vector4( 0, 0, 0, 0)));
 			break;
 		case eTetriminoType.TYPE_T:			
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 0, 0), 		
 				new Vector4( 0, 1, 1, 0),
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 0, 0), 		
 				new Vector4( 1, 1, 1, 0),
 				new Vector4( 0, 0, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 1, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 1, 0, 0), 		
 				new Vector4( 1, 1, 0, 0),
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
 			m_configurations.Add(new Matrix4x4(
-				new Vector4( 0, 0, 0, 0), 		//to read this, turn your screen counter clockwise
+				new Vector4( 0, 0, 0, 0), 		
 				new Vector4( 1, 1, 1, 0),
 				new Vector4( 0, 1, 0, 0),
 				new Vector4( 0, 0, 0, 0)));
@@ -169,19 +173,19 @@ public class Tetrimino {
 
 	private eTetriminoType m_type;
 
-	public enum eTetriminoType
-	{
-		BLANK, //used for Cell which are empty
-		TYPE_I,
-		TYPE_O,
-		TYPE_T,
-		TYPE_L,
-		TYPE_J,
-		TYPE_Z,
-		TYPE_S,
-	}
+    public enum eTetriminoType
+    {
+        BLANK, //used for Cell which are empty
+        TYPE_I,
+        TYPE_O,
+        TYPE_T,
+        TYPE_L,
+        TYPE_J,
+        TYPE_Z,
+        TYPE_S,
+    }
 
-	public eTetriminoType GetTetriminoType()
+    public eTetriminoType GetTetriminoType()
 	{
 		return m_type;
 	}
@@ -234,10 +238,12 @@ public class Tetrimino {
 		{
 			for(int y = 0; y < 4; y++)
 			{
-				//new Tetri position -> change Cell
 				if(_config[x, y] == 1)
 				{	
-					cells.Add(new Vector2Int(x + _pos.x, y + _pos.y));
+					cells.Add(new Vector2Int(x + _pos.x, (3 - y) + _pos.y));
+                    //it's not  'y'  but '3 - y' because we choose to build our grid
+                    //with the 0,0 bottom left, and max,max in top right, so the Y 
+                    //values are inversed from the matrix reading sens
 				}
 			}
 		}

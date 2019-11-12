@@ -37,7 +37,8 @@ public class GameInstance {
         m_availableTetrimini = new List<Tetrimino.eTetriminoType>();
         for (int i = 0; i < _availableTetrimini.Count; i++)
         {
-            m_availableTetrimini.Add(_availableTetrimini[i].m_type);
+            if(_availableTetrimini[i].m_type != Tetrimino.eTetriminoType.BLANK)
+                m_availableTetrimini.Add(_availableTetrimini[i].m_type);
         }
 
         m_grid = new GameGrid(_gridSizeX, _gridSizeY, _refreshRenderingMethod);

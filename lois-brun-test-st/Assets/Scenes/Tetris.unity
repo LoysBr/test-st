@@ -938,7 +938,6 @@ MonoBehaviour:
   m_menuManager: {fileID: 1114343949}
   m_gridSizeX: 10
   m_gridSizeY: 22
-  m_availableTetrimini: 01000000020000000200000002000000
   m_startingStepDuration: 1
   m_levelUpStepDurationDiminishing: 0.05
   m_minTimeBetweenMoveDownInputs: 0.05
@@ -1926,11 +1925,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_availableTetrimini:
-  - m_name: 
-    m_type: 1
+  - m_name: I
+    m_type: 4
     m_color: {r: 0, g: 0, b: 0, a: 0}
+  - m_name: Z
+    m_type: 6
+    m_color: {r: 0.7924528, g: 0.31025273, b: 0.31025273, a: 0}
+  - m_name: T
+    m_type: 3
+    m_color: {r: 0.7924528, g: 0.31025273, b: 0.31025273, a: 0}
   - m_name: O
-    m_type: 2
+    m_type: 0
+    m_color: {r: 0.7924528, g: 0.31025273, b: 0.31025273, a: 0}
+  - m_name: O
+    m_type: 0
+    m_color: {r: 0.7924528, g: 0.31025273, b: 0.31025273, a: 0}
+  - m_name: O
+    m_type: 0
+    m_color: {r: 0.7924528, g: 0.31025273, b: 0.31025273, a: 0}
+  - m_name: O
+    m_type: 0
     m_color: {r: 0.7924528, g: 0.31025273, b: 0.31025273, a: 0}
 --- !u!4 &1532625878
 Transform:
